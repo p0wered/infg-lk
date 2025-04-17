@@ -1,47 +1,223 @@
 <script setup lang="ts">
+import ButtonPrimary from "../components/ButtonPrimary.vue";
+import CountrySelector from "../components/CountrySelector.vue";
+import {ref, watch} from 'vue';
+import SmsCodeInput from "../components/SmsCodeInput.vue";
+
+const countryCode = ref('7');
+const phoneNumber = ref('');
+const isValid = ref(false);
+const errorMessage = ref('');
+
+const formatPhoneNumber = (value: string) => {
+  const numbers = value.replace(/\D/g, '');
+
+  if (numbers.length <= 3) {
+    return numbers;
+  } else if (numbers.length <= 6) {
+    return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+  } else {
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 6)}-${numbers.slice(6, 11)}`;
+  }
+};
+
+watch(phoneNumber, (newValue) => {
+  const formattedValue = formatPhoneNumber(newValue);
+  if (newValue !== formattedValue) {
+    phoneNumber.value = formattedValue;
+  }
+
+  validatePhoneNumber();
+});
+
+const validatePhoneNumber = () => {
+  const digitsOnly = phoneNumber.value.replace(/\D/g, '');
+
+  if (digitsOnly.length === 0) {
+    errorMessage.value = '';
+    isValid.value = false;
+  } else if (digitsOnly.length < 10) {
+    errorMessage.value = 'Номер телефона должен содержать не менее 10 цифр';
+    isValid.value = false;
+  } else if (digitsOnly.length > 11) {
+    errorMessage.value = 'Номер телефона должен содержать не более 11 цифр';
+    isValid.value = false;
+  } else {
+    errorMessage.value = '';
+    isValid.value = true;
+  }
+};
+
+const isPhoneSubmitted = ref(false);
+const smsCode = ref('');
+
+const handleSubmit = () => {
+  validatePhoneNumber();
+  if (isValid.value) {
+    console.log('Форма отправлена', countryCode.value, phoneNumber.value);
+    isPhoneSubmitted.value = true;
+  }
+};
+
+const handleCodeSubmit = () => {
+  console.log('Код из СМС:', smsCode.value);
+};
 
 </script>
 
 <template>
   <div class="outer-box">
     <div class="inner-box">
-      <div class="title">
-        <h4>Вход</h4>
-        <p>Введите номер телефона, который указывали при регистрации</p>
-      </div>
-      <div>
-        <div>
-
+      <div class="login-layout">
+        <div class="title">
+          <p class="md-text">
+            {{isPhoneSubmitted
+              ? 'Подтверждение'
+              : 'Вход' }}
+          </p>
+          <p class="sm-text">
+            {{isPhoneSubmitted
+              ? 'Введите код из отправленного Вам сообщения'
+              : 'Введите номер телефона, который указывали при регистрации' }}
+          </p>
         </div>
-        <input placeholder="000-000-0000">
+
+        <div class="flex-center" style="gap: 12px">
+          <div v-if="!isPhoneSubmitted" class="phone-input" :class="{ 'error': errorMessage }">
+            <CountrySelector v-model="countryCode" />
+            <p>+{{countryCode}}</p>
+            <input
+                v-model="phoneNumber"
+                placeholder="000-000-0000"
+                maxlength="12"
+                @blur="validatePhoneNumber"
+            >
+          </div>
+
+          <div v-else>
+            <SmsCodeInput v-model="smsCode" />
+          </div>
+
+          <div class="error-message" v-if="!isPhoneSubmitted && errorMessage">
+            {{errorMessage}}
+          </div>
+        </div>
       </div>
-      <p>
-        Продолжая, вы соглашаетесь с <a>политикой обработки ПД</a> и <a>согласием на обработку ПД</a>
-      </p>
+
+      <div class="flex-center" style="gap: 20px">
+        <p v-if="!isPhoneSubmitted" class="xs-text">
+          Продолжая, вы соглашаетесь с
+          <a href="#" class="xs-text" style="color: var(--primary-500)">политикой обработки ПД</a>
+          и
+          <a href="#" class="xs-text" style="color: var(--primary-500)">согласием на обработку ПД</a>
+        </p>
+        <p v-else class="xs-text">
+          Не получили сообщение?
+          <a href="#" class="xs-text" style="color: var(--primary-500)">Отправить ещё раз...</a>
+        </p>
+        <ButtonPrimary
+            text="Next →"
+            @click="isPhoneSubmitted ? handleCodeSubmit() : handleSubmit()"
+            :disabled="!isPhoneSubmitted ? !isValid : smsCode.length < 4"
+        />
+      </div>
     </div>
   </div>
 </template>
 
+
 <style scoped>
-  .outer-box{
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.outer-box{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.inner-box{
+  width: 100%;
+  max-width: 550px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 100px;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.inner-box .xs-text{
+  text-align: center;
+}
+
+.login-layout{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 80px;
+}
+
+.title{
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  text-align: center;
+}
+
+.title .sm-text{
+  color: var(--content-neutral);
+}
+
+.phone-input{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 280px;
+  gap: 8px;
+  padding: 6px 6px 0 6px;
+  border-bottom: 1px solid var(--content-neutral);
+}
+
+.phone-input.error {
+  border-bottom: 1px solid var(--error);
+}
+
+.phone-input input{
+  width: 150px;
+  border: none;
+  font-size: 24px;
+  line-height: 32px;
+  padding-bottom: 2.3px;
+}
+
+.phone-input p{
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.error-message {
+  color: var(--error);
+  font-size: 14px;
+  text-align: center;
+}
+
+.sms-input input {
+  width: 200px;
+  border: none;
+  border-bottom: 1px solid var(--content-neutral);
+  font-size: 24px;
+  line-height: 32px;
+  padding: 6px;
+  text-align: center;
+}
+
+
+@media screen and (max-width: 760px){
   .inner-box{
+    box-shadow: none;
     padding: 1.25rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
-  .title{
-    display: flex;
-    gap: 8px;
-    flex-direction: column;
-    text-align: center;
-  }
-  .title p{
-    color: var(--content-secondary)
-  }
+}
 </style>

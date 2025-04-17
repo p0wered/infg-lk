@@ -4,8 +4,8 @@ import ProfileView from '../views/ProfileView.vue'
 import AuthView from "../views/AuthView.vue";
 
 const routes = [
-    { path: '/', component: ProfileView },
-    { path: '/login', component: AuthView },
+    {path: '/profile', component: ProfileView},
+    {path: '/login', component: AuthView},
 ]
 
 const router = createRouter({

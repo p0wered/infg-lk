@@ -28,8 +28,13 @@ This license is available with a FAQ at: https://openfontlicense.org
 
 :root{
     --content-dark: #000000;
+    --content-darker: #BFBFBFFF;
     --content-light: #ffffff;
-    --content-secondary: #575757;
+    --content-neutral: #575757;
+    --primary-500: #4D72F5;
+    --primary-300: #A2B7FF;
+    --primary-100: #EAEEFFFF;
+    --error: #EB6C86FF;
 }
 
 ::selection {
@@ -66,13 +71,9 @@ p, h1, h2, h3, h4 {
     padding: 0;
 }
 
-p{
+p, input{
     font-size: 18px;
-}
-
-h4{
-    font-size: 32px;
-    line-height: 42px;
+    padding: 0;
 }
 
 a, a:visited{
@@ -97,4 +98,25 @@ textarea:focus, input:focus{
 
 *:focus {
     outline: none;
+}
+
+.flex-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.xs-text{
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.sm-text{
+    font-size: 14px;
+}
+
+.md-text{
+    font-size: 24px;
+    line-height: 32px;
 }
