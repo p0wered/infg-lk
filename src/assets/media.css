@@ -1,0 +1,6 @@
+@media screen and (max-width: 760px) {
+    .md-text{
+        font-size: 20px;
+        line-height: 26px;
+    }
+}

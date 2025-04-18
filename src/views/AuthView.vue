@@ -213,11 +213,12 @@ const handleCodeSubmit = () => {
   text-align: center;
 }
 
-
 @media screen and (max-width: 760px){
   .inner-box{
     box-shadow: none;
     padding: 1.25rem;
+    margin-top: 20vh;
+    height: 100%;
   }
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue'
+import {defineProps, defineEmits} from 'vue'
 
 const props = defineProps({
   text: {
@@ -21,13 +21,13 @@ const emit = defineEmits(['click'])
       @click="emit('click')"
       :disabled="disabled"
   >
-    {{ text }}
+    {{text}}
   </button>
 </template>
 
 <style scoped>
   .btn-primary {
-    padding: 12px 32px;
+    padding: 12px 64px;
     border-radius: 999px;
     border: none;
     background-color: var(--content-dark);
@@ -42,10 +42,9 @@ const emit = defineEmits(['click'])
     cursor: not-allowed;
   }
 
-  @media screen and (max-width: 460px) {
+  @media screen and (max-width: 760px) {
     .btn-primary {
       width: 100%;
-      max-width: 327px;
     }
   }
 </style>
