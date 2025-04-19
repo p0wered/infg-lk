@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import ButtonPrimary from "../components/ButtonPrimary.vue";
 import CountrySelector from "../components/CountrySelector.vue";
 import {ref, watch} from 'vue';
 import SmsCodeInput from "../components/SmsCodeInput.vue";
+import ButtonPrimary from "../components/ButtonPrimary.vue";
 
 const countryCode = ref('7');
 const phoneNumber = ref('');
@@ -170,13 +170,13 @@ const handleCodeSubmit = () => {
   color: var(--content-neutral);
 }
 
-.phone-input{
+.phone-input {
+  position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 280px;
   gap: 8px;
-  padding: 6px 6px 0 6px;
+  padding: 6px 2px 0 2px;
   border-bottom: 1px solid var(--content-neutral);
 }
 
@@ -185,11 +185,10 @@ const handleCodeSubmit = () => {
 }
 
 .phone-input input{
-  width: 150px;
+  width: 100%;
   border: none;
   font-size: 24px;
   line-height: 32px;
-  padding-bottom: 2.3px;
 }
 
 .phone-input p{

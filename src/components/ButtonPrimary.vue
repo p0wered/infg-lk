@@ -1,18 +1,18 @@
 <script setup>
-import {defineProps, defineEmits} from 'vue'
+  import {defineProps, defineEmits} from 'vue'
 
-const props = defineProps({
-  text: {
-    type: String,
-    default: 'Button'
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  }
-})
+  const props = defineProps({
+    text: {
+      type: String,
+      default: 'Button'
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  })
 
-const emit = defineEmits(['click'])
+  const emit = defineEmits(['click'])
 </script>
 
 <template>
@@ -27,13 +27,14 @@ const emit = defineEmits(['click'])
 
 <style scoped>
   .btn-primary {
-    padding: 12px 64px;
+    padding: 14px 64px;
     border-radius: 999px;
     border: none;
     background-color: var(--content-dark);
     color: var(--content-light);
     cursor: pointer;
     transition: background-color 0.3s;
+    font-size: 18px;
   }
 
   .btn-primary:disabled {

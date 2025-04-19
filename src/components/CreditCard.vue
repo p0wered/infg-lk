@@ -1,33 +1,61 @@
 <script setup lang="ts">
-import {defineProps} from "vue";
+  import { defineProps, computed } from 'vue';
 
-const props = defineProps({
-  bankName: {
-    type: String,
-    default: 'Bank'
-  },
-  paymentSystem: {
-    type: String,
-    default: 'VISA'
-  },
-  cardNumber: {
-    type: String,
-    default: '0000 00×× ×××× 0000'
-  },
-})
+  const props = defineProps({
+    bankName: {
+      type: String,
+      default: 'Bank'
+    },
+    paymentSystem: {
+      type: String,
+      default: 'VISA'
+    },
+    cardNumber: {
+      type: String,
+      default: '0000 00×× ×××× 0000'
+    },
+    cardStyle: {
+      type: String,
+      default: 'blue'
+    }
+  });
+
+  const cardColors = computed(() => {
+    switch (props.cardStyle) {
+      case 'yellow':
+        return {
+          boxShadow: '3px 3px 0 0 #B6E05DFF',
+          backgroundColor: '#c2e27e',
+          headingText: '#000000'
+        };
+      case 'blue':
+      default:
+        return {
+          boxShadow: '3px 3px 0 0 #4D72F5FF',
+          backgroundColor: '#004EE4FF',
+          headingText: '#FFDDCCFF'
+        };
+    }
+  });
 </script>
 
+
 <template>
-  <div class="card-layout">
+  <div class="card-layout" :style="cardColors">
     <div class="heading">
       <div>
-        <p class="xs-text" style="margin-bottom: 6px">{{bankName}}</p>
-        <p class="xxs-text">{{paymentSystem}}</p>
+        <p class="xs-text"
+           :style="{color: cardColors.headingText, marginBottom: '6px'}">
+          {{bankName}}
+        </p>
+        <p class="xxs-text"
+           :style="{color: cardColors.headingText}">
+        {{paymentSystem}}</p>
       </div>
-      <div class="bank-logo"/>
+      <div class="bank-logo" />
     </div>
     <div class="card-number">
-      <p>0000 00×× ×××× 0000</p>
+      <p>{{cardNumber}}</p>
     </div>
   </div>
 </template>
@@ -43,14 +71,17 @@ const props = defineProps({
     height: 200px;
     border-radius: 20px;
     border: 1px solid var(--content-dark);
-    box-shadow: 3px 3px 0 0 var(--primary-500);
-    background: var(--primary-700);
     padding: 16px;
     margin-left: 16px;
     margin-right: 2px;
+    background-image: url("../assets/img/Coin.png");
+    background-size: 30%;
+    background-repeat: no-repeat;
+    background-position: 225px 135px;
   }
 
-  .card-layout:before, .card-layout:after {
+  .card-layout:before,
+  .card-layout:after {
     content: '';
     position: absolute;
     border-radius: 50%;
@@ -70,11 +101,11 @@ const props = defineProps({
     left: -40px;
   }
 
-  .card-layout p{
+  .card-layout p {
     color: #FFDDCCFF;
   }
 
-  .heading{
+  .heading {
     display: flex;
     justify-content: space-between;
   }
@@ -86,7 +117,7 @@ const props = defineProps({
     width: fit-content;
   }
 
-  .bank-logo{
+  .bank-logo {
     width: 48px;
     height: 48px;
     background-color: #fbfe4e;
