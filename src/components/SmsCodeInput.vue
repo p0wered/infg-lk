@@ -58,7 +58,8 @@ const onBackspace = (index: number) => {
     <input
         v-for="(digit, index) in codeDigits"
         :key="index"
-        type="text"
+        type="tel"
+        inputmode="numeric"
         class="code-box"
         maxlength="1"
         v-model="codeDigits[index]"

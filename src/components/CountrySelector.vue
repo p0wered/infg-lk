@@ -49,7 +49,7 @@
       <span class="flag">
         <component :is="selectedCountry.flagComponent" />
       </span>
-      <SvgChevron :class="{ 'rotate-180': isOpen }" />
+      <SvgChevron :class="{'rotate-180': isOpen}" />
     </div>
     <div v-if="isOpen" class="dropdown-menu">
       <div

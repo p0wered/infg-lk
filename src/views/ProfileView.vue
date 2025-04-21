@@ -6,39 +6,92 @@
   import NewsItem from "../components/NewsItem.vue";
   import SvgCircleArrowRight from "../icons/SvgCircleArrowRight.vue";
   import ProgressCircle from "../components/ProgressCircle.vue";
+  import SvgMainTab from "../icons/SvgMainTab.vue";
+  import SvgSupportTab from "../icons/SvgSupportTab.vue";
+  import SvgSubsTab from "../icons/SvgSubsTab.vue";
+  import ListMenuItem from "../components/ListMenuItem.vue";
+  import {ref, onMounted, onBeforeUnmount, watch} from 'vue'
+  import SvgChevron from "../icons/SvgChevron.vue";
+  import ListMenuSubs from '../assets/img/ListMenuSubs.png';
+  import ListMenuTranc from '../assets/img/ListMenuTranc.png';
+  import ListMenuBank from '../assets/img/ListMenuBank.png';
+  import ListMenuRing from '../assets/img/ListMenuRing.png';
+  import ListMenuStats from '../assets/img/ListMenuStats.png';
+
+  const isOpen = ref(false)
+
+  const toggleMenu = () => {
+    isOpen.value = !isOpen.value
+  }
+
+  watch(isOpen, (newValue) => {
+    if (newValue) {
+      document.body.classList.add('menu-open')
+    } else {
+      document.body.classList.remove('menu-open')
+    }
+  })
+
+  const handleMenuScroll = (event) => {
+    event.stopPropagation()
+
+    const menuItems = event.currentTarget
+    const isAtTop = menuItems.scrollTop === 0
+    const isAtBottom = menuItems.scrollHeight - menuItems.scrollTop === menuItems.clientHeight
+
+    if ((isAtTop && event.deltaY < 0) || (isAtBottom && event.deltaY > 0)) {
+      event.preventDefault()
+    }
+  }
+
+  onMounted(() => {
+    const menuItems = document.querySelector('.menu-items')
+    if (menuItems) {
+      menuItems.addEventListener('wheel', handleMenuScroll, { passive: false })
+      menuItems.addEventListener('touchmove', handleMenuScroll, { passive: false })
+    }
+  })
+
+  onBeforeUnmount(() => {
+    const menuItems = document.querySelector('.menu-items')
+    if (menuItems) {
+      menuItems.removeEventListener('wheel', handleMenuScroll)
+      menuItems.removeEventListener('touchmove', handleMenuScroll)
+    }
+
+    document.body.classList.remove('menu-open')
+  })
 </script>
 
 <template>
-  <div class="container">
-    <div class="">
-      <div class="heading-box">
-        <div class="heading">
-          <div>
-            <p class="md-text" style="margin-bottom: 6px">Иван Иванович</p>
-            <p class="xs-text">Добро пожаловать!</p>
+  <div class="container" style="z-index: 0">
+    <div class="heading-box">
+      <div class="heading">
+        <div>
+          <p class="md-text" style="margin-bottom: 6px">Иван Иванович</p>
+          <p class="xs-text">Добро пожаловать!</p>
+        </div>
+        <div class="btn-layout" style="align-items: center">
+          <div class="btn-notifications flex-center">
+            <SvgNotificationUnread/>
           </div>
-          <div class="btn-layout">
-            <div class="btn-notifications flex-center">
-              <SvgNotificationUnread/>
-            </div>
-            <div class="profile-picture flex-center">
-              <img src="../assets/img/pfp.png" alt="pfp">
-            </div>
+          <div class="profile-picture flex-center">
+            <img src="../assets/img/pfp.png" alt="pfp">
           </div>
         </div>
-        <div>
-          <p class="xs-text" style="margin: 0 0 10px 16px">Мои способы оплаты</p>
-          <div class="card-list-container">
-            <div class="card-list">
-              <CreditCard card-style="blue"/>
-              <CreditCard card-style="yellow"/>
-            </div>
+      </div>
+      <div>
+        <p class="xs-text" style="margin: 0 0 10px 16px">Мои способы оплаты</p>
+        <div class="card-list-container">
+          <div class="card-list" data-aos="fade-left">
+            <CreditCard card-style="blue"/>
+            <CreditCard card-style="yellow"/>
           </div>
         </div>
       </div>
     </div>
-    <div class=" bubble-layout">
-      <div class="btn-layout" style="padding: 0 16px">
+    <div class=" bubble-layout" data-aos="fade-in">
+      <div class="btn-layout">
         <div class="gradient-bg">
           <div class="btn-refund flex-center">
             <img src="../assets/img/money-emoji.png" alt="emoji">
@@ -57,15 +110,15 @@
           </div>
         </div>
       </div>
-      <div class="stories-list">
-        <BubbleStory title="За что списали?" imgSrc="/src/assets/img/story-1.png"/>
-        <BubbleStory title="Преимущества подписки" imgSrc="/src/assets/img/story-2.png"/>
-        <BubbleStory title="Мы мошенники?" imgSrc="/src/assets/img/story-3.png"/>
-        <BubbleStory title="Безопасность ваших данных" imgSrc="/src/assets/img/story-4.png"/>
-        <BubbleStory title="За что списали?" imgSrc="/src/assets/img/story-1.png"/>
+      <div class="stories-list" data-aos="fade-in">
+        <BubbleStory title="За что списали?" imgSrc="../img/story-1.png"/>
+        <BubbleStory title="Преимущества подписки" imgSrc="../img/story-2.png"/>
+        <BubbleStory title="Мы мошенники?" imgSrc="../img/story-3.png"/>
+        <BubbleStory title="Безопасность ваших данных" imgSrc="../img/story-4.png"/>
+        <BubbleStory title="За что списали?" imgSrc="../img/story-1.png"/>
       </div>
     </div>
-    <div class=" news-layout">
+    <div class=" news-layout" data-aos="fade-in">
       <div class="heading">
         <p class="md-text">Интересные статьи</p>
         <a href="#">
@@ -73,60 +126,143 @@
           <SvgCircleArrowRight/>
         </a>
       </div>
-      <div class="news-list">
+      <div class="news-list" >
         <NewsItem
             background-color="#b4dada"
             title="Неизвестные списания с карты?"
             desc="Статья · 2 мин чтения"
-            background-image="/src/assets/img/news-1.png"
+            background-image="../img/news-1.png"
         />
         <NewsItem
             background-color="#f2c7b1"
             title="Чем плох возврат через банк?"
             desc="Коротко · 1 min"
-            background-image="/src/assets/img/news-2.png"
+            background-image="../img/news-2.png"
+        />
+        <NewsItem
+            background-color="#b4dada"
+            title="Неизвестные списания с карты?"
+            desc="Статья · 2 мин чтения"
+            background-image="../img/news-1.png"
         />
       </div>
     </div>
     <div class="ylw-btn-layout">
-      <div class="score-box">
+      <div class="score-box" data-aos="fade-in">
         <ProgressCircle :value="750"/>
         <p>Ваш кредитный рейтинг</p>
       </div>
-      <div class="support-box">
+      <div class="support-box" data-aos="fade-in">
         <img src="../assets/img/Chat.png" alt="chat">
         <p>Горячая линия 24/7</p>
       </div>
     </div>
-    <div class="report-layout">
+    <div class="report-layout" data-aos="fade-in">
       <div class="report-box">
         <div class="info">
           <p class="md-text">Отчет по оплаченной услуге</p>
           <p class="xs-text">Получите полный отчет из всех МФО и МКК</p>
         </div>
       </div>
-      <div class="master-box">
-        <img src="../assets/img/coin-sm.png" alt="coin">
-        <div class="inner-layout">
-          <p>Мастер подбора кредита <span style="color: #118C4FFF">98%</span></p>
-          <div class="progress-bar-outer">
-            <div class="progress-bar-inner"/>
-          </div>
-          <div class="desc">
-            <p style="width: 60%">Предложения с высокой вероятностью кредита</p>
-            <div>
-              <p>Начать</p>
-              <SvgCircleArrowRight/>
+      <div class="master-box-wrap">
+        <div class="master-box">
+          <img src="../assets/img/coin-sm.png" alt="coin">
+          <div class="inner-layout">
+            <p>Мастер подбора кредита <span style="color: #118C4FFF">98%</span></p>
+            <div class="progress-bar-outer">
+              <div class="progress-bar-inner"/>
+            </div>
+            <div class="desc">
+              <p style="width: 60%">Предложения с высокой вероятностью кредита</p>
+              <div>
+                <p style="font-family: 'Sora', sans-serif; font-weight: 600">Начать</p>
+                <SvgCircleArrowRight/>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="tab-menu">
-    <p>Главная</p>
-    <p>Поддержка</p>
-    <p>Подписки</p>
+  <div class="tab-menu" data-aos="fade-up" data-aos-offset="-10">
+    <div class="item">
+      <SvgMainTab/>
+      <p>Главная</p>
+    </div>
+    <div class="item">
+      <SvgSupportTab/>
+      <p>Поддержка</p>
+    </div>
+    <div class="item">
+      <SvgSubsTab/>
+      <p>Подписки</p>
+    </div>
+  </div>
+  <div class="list-menu" data-aos="fade-up" data-aos-offset="-10">
+    <div class="title" @click="toggleMenu">
+      <div class="button">
+        <p>Меню</p>
+        <SvgChevron :style="{transform: isOpen ? 'rotate(0deg)' : 'rotate(180deg)', transition: 'transform 0.2s ease-in-out'}" />
+      </div>
+    </div>
+    <transition name="slide-fade">
+      <div v-show="isOpen" class="menu-items">
+        <ListMenuItem
+            title="Список подписок"
+            desc="Управление и редактирование"
+            :icon-src="ListMenuSubs"
+        />
+        <div id="item">
+          <div id="inner">
+            <img src="../assets/img/coin-sm.png" alt="coin">
+            <div>
+              <p id="list-name">Добавьте больше данных о себе</p>
+              <p id="list-desc">Это поможет лучше подобрать займ</p>
+            </div>
+          </div>
+        </div>
+        <ListMenuItem
+            title="История транзакций"
+            desc="Описание оплат"
+            :icon-src="ListMenuTranc"
+        />
+        <ListMenuItem
+            title="Список МФО и МКК"
+            desc="Полученные займы и другое"
+            :icon-src="ListMenuBank"
+        />
+        <ListMenuItem
+            title="История использования услуги"
+            desc="Полученная услуга"
+            :icon-src="ListMenuRing"
+        />
+        <ListMenuItem
+            title="Список подписок"
+            desc="Управление и редактирование"
+            :icon-src="ListMenuSubs"
+        />
+        <ListMenuItem
+            title="Кредитный рейтинг"
+            desc="История изменений"
+            :icon-src="ListMenuStats"
+        />
+        <ListMenuItem
+            title="История транзакций"
+            desc="Описание оплат"
+            :icon-src="ListMenuTranc"
+        />
+        <ListMenuItem
+            title="Список МФО и МКК"
+            desc="Полученные займы и другое"
+            :icon-src="ListMenuBank"
+        />
+        <ListMenuItem
+            title="История использования услуги"
+            desc="Полученная услуга"
+            :icon-src="ListMenuRing"
+        />
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -141,19 +277,19 @@
     background-repeat: no-repeat;
     background-position: calc(97% + 120px) -91px;
     overflow: hidden;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
   }
 
   .heading-box .heading{
     display: flex;
     justify-content: space-between;
-    padding: 16px 16px 0 16px;
+    padding: 24px 16px 0 16px;
   }
 
   .btn-layout {
     display: flex;
-    align-items: stretch;
     justify-content: center;
+    padding: 0 16px 0 0;
     gap: 16px;
   }
 
@@ -253,7 +389,7 @@
     display: flex;
     overflow: hidden;
     justify-content: center;
-    padding-right: 16px;
+    padding: 0 16px;
   }
 
   .bubble-list{
@@ -286,11 +422,11 @@
 
   .news-layout .heading{
     display: flex;
-    justify-content: unset;
+    justify-content: space-between;
     align-items: center;
     padding-left: 16px;
     margin-bottom: 8px;
-    padding-top: 16px;
+    padding-top: 30px;
     gap: 20px;
   }
 
@@ -316,7 +452,7 @@
   .ylw-btn-layout{
     display: flex;
     gap: 16px;
-    padding: 16px;
+    padding: 30px 16px 16px 16px;
   }
 
   .score-box{
@@ -392,18 +528,26 @@
     color: var(--content-neutral);
   }
 
-  .master-box{
+  .master-box-wrap{
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    background-color: #f8f8f8;
+    border-radius: 32px;
+  }
+
+  .master-box{
+    display: flex;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
+    padding: 16px;
     gap: 16px;
-    margin-bottom: 60px;
   }
 
   .master-box img{
-    width: 44px;
-    height: 44px;
+    width: 106px;
+    height: 106px;
   }
 
   .master-box .inner-layout{
@@ -414,7 +558,7 @@
   }
 
   .master-box .inner-layout p{
-    font-size: 14px;
+    font-size: 18px;
   }
 
   .master-box .progress-bar-outer{
@@ -456,22 +600,137 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-    padding: 16px;
+    padding: 4px 12px 14px 12px;
     background: #fff;
-    display: flex;
+    display: none;
     justify-content: space-around;
     align-items: center;
+    z-index: 3;
+    touch-action: none;
   }
 
   .tab-menu p{
     font-size: 12px;
   }
 
+  .tab-menu .item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: end;
+    height: 50px;
+    gap: 6px;
+  }
+
+  .list-menu {
+    display: none;
+    position: fixed;
+    bottom: 62px;
+    width: 100%;
+    padding: 0 12px;
+    background: white;
+    border-radius: 32px 32px 0 0;
+    box-shadow: 0 -4px 12px 0 rgba(0, 0, 0, 0.1);
+    z-index: 2;
+  }
+
+  .list-menu .title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+  }
+
+  .list-menu .button{
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .menu-items {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-bottom: 10px;
+    max-height: 65vh;
+    transition: 0.3s ease-in-out;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    overscroll-behavior-y: contain;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+  }
+
+  .menu-items::-webkit-scrollbar {
+    display: none;
+  }
+
+  #item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    background-color: var(--primary-500);
+    border-radius: 12px;
+  }
+
+  #item #inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  #item #inner img{
+    width: 49px;
+    height: 49px;
+  }
+
+  #item #inner #list-name {
+    font-size: 14px;
+    color: white;
+    margin-bottom: 2px;
+  }
+
+  #item #inner #list-desc {
+    font-size: 12px;
+    color: #F2F2F2FF;
+  }
+
+  .slide-fade-enter-active,
+  .slide-fade-leave-active {
+    transition: max-height 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    overflow: hidden;
+  }
+
+  .slide-fade-enter-from,
+  .slide-fade-leave-to {
+    max-height: 0;
+    opacity: 0;
+  }
+
+  .slide-fade-enter-to,
+  .slide-fade-leave-from {
+    max-height: 65vh;
+    opacity: 1;
+  }
+
+  body.menu-open {
+    overflow: hidden;
+  }
+
   @media screen and (max-width: 860px) {
+    .heading-box{
+      border-radius: 0 0 32px 32px;
+      margin-bottom: 20px;
+    }
     .bubble-layout{
       flex-direction: column;
       gap: 18px;
-      padding-right: 0;
+      padding: 0;
+    }
+    .btn-layout {
+      padding: 0 16px;
     }
     .stories-list{
       background-color: transparent !important;
@@ -480,12 +739,37 @@
     }
     .news-layout .heading{
       justify-content: space-between;
+      padding-top: 20px;
     }
     .ylw-btn-layout{
       flex-direction: column;
+      padding: 16px;
     }
     .report-layout{
       flex-direction: column;
+    }
+    .tab-menu{
+      display: flex;
+    }
+    .list-menu{
+      display: block;
+    }
+    .master-box-wrap{
+      background-color: transparent;
+    }
+    .master-box{
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 0;
+      margin-bottom: 117px;
+    }
+    .master-box img{
+      width: 44px;
+      height: 44px;
+    }
+    .master-box .inner-layout p{
+      font-size: 14px;
     }
   }
 </style>

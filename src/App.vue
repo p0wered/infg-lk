@@ -1,33 +1,13 @@
 <script setup lang="ts">
-  import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
+import DesktopNavbar from './components/DesktopNavbar.vue'
 
-  const width = ref(window.innerWidth)
-  const height = ref(window.innerHeight)
-
-  function updateSize() {
-    width.value = window.innerWidth
-    height.value = window.innerHeight
-  }
-
-  onMounted(() => {
-    window.addEventListener('resize', updateSize)
-  })
-
-  onUnmounted(() => {
-    window.removeEventListener('resize', updateSize)
-  })
+const isMenuOpen = ref(false)
 </script>
 
 <template>
-  <div>
-    <router-link to="/login">login</router-link>
-    <router-link to="/profile">profile</router-link>
-    <div>
-      <p>Ширина экрана: {{width}}px</p>
-      <p>Высота экрана: {{height}}px</p>
-    </div>
-  </div>
-  <router-view/>
+  <DesktopNavbar v-model:isMenuOpen="isMenuOpen" />
+  <router-view />
 </template>
 
 <style scoped>

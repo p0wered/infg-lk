@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { defineProps } from "vue";
+  import {defineProps} from "vue";
 
   const props = defineProps<{
     backgroundColor: string;
@@ -30,7 +30,7 @@
     border: 1px solid var(--content-dark);
     box-shadow: 4px 4px 0 var(--content-dark);
     background-repeat: no-repeat;
-    background-size: 80%;
+    background-size: 60%;
     background-position: bottom center;
     padding: 16px;
     text-align: center;

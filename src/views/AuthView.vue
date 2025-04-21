@@ -87,6 +87,8 @@ const handleCodeSubmit = () => {
             <CountrySelector v-model="countryCode" />
             <p>+{{countryCode}}</p>
             <input
+                type="tel"
+                inputmode="numeric"
                 v-model="phoneNumber"
                 placeholder="000-000-0000"
                 maxlength="12"
@@ -173,6 +175,7 @@ const handleCodeSubmit = () => {
 .phone-input {
   position: relative;
   width: 100%;
+  max-width: 300px;
   display: flex;
   align-items: center;
   gap: 8px;
