@@ -27,7 +27,7 @@
     gap: 8px;
     text-align: center;
     max-width: 92px;
-    margin-left: 16px;
+    margin-left: 3px;
   }
 
   .bubble img{
@@ -47,6 +47,9 @@
   }
 
   @media screen and (max-width: 860px) {
+    .bubble {
+      margin-left: 16px;
+    }
     .bubble img{
       width: 84px;
       height: 84px;

@@ -42,15 +42,25 @@
 
 <style scoped>
   .bubble {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     aspect-ratio: 1;
   }
 
   .bubble p{
-    font-size: 8px;
+    font-size: 11px;
     line-height: 1;
     color: #E6E6E6FF;
+  }
+
+  @media screen and (max-width: 860px){
+    .bubble {
+      width: 40px;
+      height: 40px;
+    }
+    .bubble p{
+      font-size: 8px;
+    }
   }
 </style>

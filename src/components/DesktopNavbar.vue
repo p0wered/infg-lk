@@ -7,7 +7,7 @@
   import ListMenuRing from "../assets/img/ListMenuRing.png";
   import ListMenuStats from "../assets/img/ListMenuStats.png";
 
-  const isMenuOpen = defineModel<boolean>('isMenuOpen', { required: true })
+  const isMenuOpen = ref(false)
 
   const width = ref(window.innerWidth)
   const height = ref(window.innerHeight)
@@ -37,13 +37,13 @@
       <a href="#">Поддержка</a>
       <a href="#">Подписки</a>
     </div>
-    <div class="hamburger-list" :class="{ open: isMenuOpen }" @click="toggleMenu">
+    <div class="hamburger-list" :class="{open: isMenuOpen}" @click="toggleMenu">
       <span></span>
       <span></span>
       <span></span>
     </div>
   </div>
-  <div class="desktop-menu" :class="{ open: isMenuOpen }">
+  <div class="desktop-menu" :class="{open: isMenuOpen}">
     <ListMenuItem
         title="Список подписок"
         desc="Управление и редактирование"
