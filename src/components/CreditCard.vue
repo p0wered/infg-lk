@@ -72,8 +72,7 @@
     border-radius: 20px;
     border: 1px solid var(--content-dark);
     padding: 16px;
-    margin-left: 16px;
-    margin-right: 2px;
+    margin: 0 0 24px 16px;
     background-image: url("../assets/img/Coin.png");
     background-size: 30%;
     background-repeat: no-repeat;

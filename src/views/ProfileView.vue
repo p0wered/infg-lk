@@ -17,6 +17,7 @@
   import ListMenuBank from '../assets/img/ListMenuBank.png';
   import ListMenuRing from '../assets/img/ListMenuRing.png';
   import ListMenuStats from '../assets/img/ListMenuStats.png';
+  import DraggableScroll from "../components/DraggableScroll.vue";
 
   const isOpen = ref(false)
 
@@ -82,12 +83,12 @@
       </div>
       <div>
         <p class="xs-text" style="margin: 0 0 10px 16px">Мои способы оплаты</p>
-        <div class="card-list-container">
-          <div class="card-list" data-aos="fade-left">
-            <CreditCard card-style="blue"/>
-            <CreditCard card-style="yellow"/>
-          </div>
-        </div>
+        <DraggableScroll>
+          <CreditCard card-style="blue" />
+          <CreditCard card-style="yellow" />
+          <CreditCard card-style="blue" />
+          <CreditCard card-style="yellow" />
+        </DraggableScroll>
       </div>
     </div>
     <div class=" bubble-layout" data-aos="fade-in">
@@ -110,13 +111,13 @@
           </div>
         </div>
       </div>
-      <div class="stories-list" data-aos="fade-in">
+      <DraggableScroll class="stories-list">
         <BubbleStory title="За что списали?" imgSrc="../img/story-1.png"/>
         <BubbleStory title="Преимущества подписки" imgSrc="../img/story-2.png"/>
         <BubbleStory title="Мы мошенники?" imgSrc="../img/story-3.png"/>
         <BubbleStory title="Безопасность ваших данных" imgSrc="../img/story-4.png"/>
         <BubbleStory title="За что списали?" imgSrc="../img/story-1.png"/>
-      </div>
+      </DraggableScroll>
     </div>
     <div class=" news-layout" data-aos="fade-in">
       <div class="heading">
@@ -187,11 +188,11 @@
   <div class="tab-menu" data-aos="fade-up" data-aos-offset="-10">
     <div class="item">
       <SvgMainTab/>
-      <p>Главная</p>
+      <router-link to="/">Главная</router-link>
     </div>
     <div class="item">
       <SvgSupportTab/>
-      <p>Поддержка</p>
+      <router-link to="/login">Поддержка</router-link>
     </div>
     <div class="item">
       <SvgSubsTab/>
@@ -341,7 +342,7 @@
     background: linear-gradient(90deg, #E8DF0A, #2f2d02);
     padding: 3px;
     flex: 0 0 auto;
-    aspect-ratio: 1;
+    width: 128px;
   }
 
   .btn-refund{
@@ -351,6 +352,7 @@
     width: 100%;
     height: 100%;
     border-radius: 30px;
+    gap: 3px;
   }
 
   .btn-refund p{
@@ -378,7 +380,7 @@
     height: 100%;
     background-image: url("../assets/img/Line2.svg");
     background-repeat: no-repeat;
-    background-position: 190px 0;
+    background-position: 105% 0;
   }
 
   .history-block p{
@@ -731,6 +733,13 @@
     }
     .btn-layout {
       padding: 0 16px;
+    }
+    .gradient-bg{
+      width: 112px;
+      height: 112px;
+    }
+    .btn-refund{
+      gap: 0;
     }
     .stories-list{
       background-color: transparent !important;
